@@ -1,7 +1,13 @@
 #!/bin/bash
 
-# Obtener la ruta del directorio donde se encuentra el script
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Resolver el enlace simbólico para obtener la ubicación real del script
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+SCRIPT_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 # Cargar variables de entorno desde el archivo .env
 if [ -f "$SCRIPT_DIR/.env" ]; then
