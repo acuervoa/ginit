@@ -1,4 +1,4 @@
-# create_repo.sh
+# ginit.sh
 
 Este script automatiza la creación de un repositorio en GitHub y configura el directorio local para rastrear ese repositorio. A continuación se detallan los pasos para su uso y configuración.
 
@@ -11,16 +11,16 @@ Este script automatiza la creación de un repositorio en GitHub y configura el d
 
 ## Preparación
 
-1. Crea un archivo `.env` en el mismo directorio que `create_repo.sh` con el siguiente contenido:
+1. Crea un archivo `.env` en el mismo directorio que `ginit.sh` con el siguiente contenido:
 
     ```env
     GITHUB_TOKEN=tu_token_de_github
     ```
 
-2. Asegúrate de que `create_repo.sh` tenga permisos de ejecución:
+2. Asegúrate de que `ginit.sh` tenga permisos de ejecución:
 
     ```bash
-    chmod +x create_repo.sh
+    chmod +x ginit.sh
     ```
 
 ## Uso
@@ -32,5 +32,5 @@ Puedes ejecutar el script desde cualquier directorio. El script tomará el nombr
 Si ejecutas el script sin proporcionar un nombre de repositorio, usará el nombre del directorio actual:
 
 ```bash
-/path/al/directorio/del/script/create_repo.sh
+/path/al/directorio/del/script/ginit.sh
 
