@@ -11,13 +11,11 @@ else
     exit 1
 fi
 
-# Verificar si el nombre del repositorio fue proporcionado
-if [ -z "$1" ]; then
-    echo "Uso: $0 NOMBRE_DEL_REPOSITORIO"
-    exit 1
-fi
+# Obtener el nombre del directorio actual
+CURRENT_DIR_NAME=$(basename "$PWD")
 
-REPO_NAME=$1
+# Verificar si el nombre del repositorio fue proporcionado, si no, usar el nombre del directorio actual
+REPO_NAME=${1:-$CURRENT_DIR_NAME}
 
 # Asegurarse de que el token de GitHub esté disponible como variable de entorno
 if [ -z "$GITHUB_TOKEN" ]; then
@@ -65,7 +63,6 @@ if [ ! -f README.md ]; then
     echo "Este es un repositorio para $REPO_NAME." >> README.md
     echo "Repositorio creado automáticamente con un script." >> README.md
 fi
-
 
 # Añadir todos los archivos al repositorio local y hacer el primer commit
 git add .
