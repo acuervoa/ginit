@@ -1,10 +1,13 @@
 #!/bin/bash
-#
-## Cargar variables de entorno desde el archivo .env
-if [ -f .env ]; then
-    export $(grep -v '^#' .env | xargs)
+
+# Obtener la ruta del directorio donde se encuentra el script
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Cargar variables de entorno desde el archivo .env
+if [ -f "$SCRIPT_DIR/.env" ]; then
+    export $(grep -v '^#' "$SCRIPT_DIR/.env" | xargs)
 else
-    echo "Error: archivo .env no encontrado."
+    echo "Error: archivo .env no encontrado en $SCRIPT_DIR."
     exit 1
 fi
 
@@ -55,6 +58,14 @@ fi
 if [ ! -d .git ]; then
     git init
 fi
+
+# Crear un archivo README.md si no existe
+if [ ! -f README.md ]; then
+    echo "# $REPO_NAME" > README.md
+    echo "Este es un repositorio para $REPO_NAME." >> README.md
+    echo "Repositorio creado automáticamente con un script." >> README.md
+fi
+
 
 # Añadir todos los archivos al repositorio local y hacer el primer commit
 git add .
