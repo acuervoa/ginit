@@ -1,6 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Resolver el enlace simbólico para obtener la ubicación real del script
+# --- Resolución de ruta del script ---
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do
   DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
@@ -9,88 +10,105 @@ while [ -h "$SOURCE" ]; do
 done
 SCRIPT_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-# Cargar variables de entorno desde el archivo .env
-if [ -f "$SCRIPT_DIR/.env" ]; then
-    export $(grep -v '^#' "$SCRIPT_DIR/.env" | xargs)
+# --- Carga segura de .env (sin romper valores con espacios) ---
+ENV_FILE="$SCRIPT_DIR/.env"
+if [[ -f "$ENV_FILE" ]]; then
+  set -a
+  # shellcheck disable=SC1090
+  . "$ENV_FILE"
+  set +a
 else
-    echo "Error: archivo .env no encontrado en $SCRIPT_DIR."
-    exit 1
+  echo "Error: archivo .env no encontrado en $SCRIPT_DIR" >&2
+  exit 1
 fi
 
-# Obtener el nombre del directorio actual
+# --- Variables requeridas ---
+: "${GITHUB_TOKEN:?Define GITHUB_TOKEN en .env}"
+: "${GITHUB_OWNER:?Define GITHUB_OWNER (tu usuario/org de GitHub) en .env}"
+
+# --- Nombre del repo ---
 CURRENT_DIR_NAME=$(basename "$PWD")
+REPO_NAME="${1:-$CURRENT_DIR_NAME}"
 
-# Verificar si el nombre del repositorio fue proporcionado, si no, usar el nombre del directorio actual
-REPO_NAME=${1:-$CURRENT_DIR_NAME}
+# --- Función HTTP simple que devuelve código de estado ---
+http_code() {
+  local method="$1"; shift
+  curl -sS -o /dev/null -w "%{http_code}" \
+    -H "Authorization: Bearer $GITHUB_TOKEN" \
+    -H "Accept: application/vnd.github+json" \
+    -X "$method" "$@"
+}
 
-# Asegurarse de que el token de GitHub esté disponible como variable de entorno
-if [ -z "$GITHUB_TOKEN" ]; then
-    echo "Error: La variable de entorno GITHUB_TOKEN no está configurada."
-    exit 1
+# --- Verificación del token (debug rápido) ---
+USER_CHECK_CODE=$(http_code GET "https://api.github.com/user")
+if [[ "$USER_CHECK_CODE" != "200" ]]; then
+  echo "Error: el token no es válido o no tiene permisos (HTTP $USER_CHECK_CODE)." >&2
+  echo "Comprueba que el PAT es correcto y tiene permisos 'repo' (PAT clásico) o permisos finos para crear repos." >&2
+  exit 1
 fi
 
-# Verificar si el repositorio remoto ya existe en GitHub
-REPO_EXIST=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: token $GITHUB_TOKEN" \
-    https://api.github.com/repos/acuervoa/$REPO_NAME)
-
-if [ $REPO_EXIST -eq 200 ]; then
-    echo "Error: El repositorio '$REPO_NAME' ya existe en GitHub."
-    exit 1
+# --- Comprobar si el repo remoto ya existe ---
+REPO_URL_API="https://api.github.com/repos/$GITHUB_OWNER/$REPO_NAME"
+REPO_EXIST_CODE=$(http_code GET "$REPO_URL_API")
+if [[ "$REPO_EXIST_CODE" == "200" ]]; then
+  echo "Error: El repositorio '$REPO_NAME' ya existe en $GITHUB_OWNER." >&2
+  exit 1
+elif [[ "$REPO_EXIST_CODE" != "404" ]]; then
+  echo "Aviso: respuesta inesperada al comprobar existencia (HTTP $REPO_EXIST_CODE)." >&2
 fi
 
-# Verificar si el directorio local ya tiene un repositorio remoto configurado
-if git remote | grep origin > /dev/null; then
-    echo "Error: El directorio local ya tiene un repositorio remoto configurado."
-    exit 1
+# --- Inicializar repo local si hace falta (antes de ejecutar comandos git) ---
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  git init
 fi
 
-# Comando curl para crear el repositorio privado
-REPO_CREATE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-     -d "{\"name\":\"$REPO_NAME\", \"private\": true}" \
-     https://api.github.com/user/repos)
-
-# Verificar si el repositorio fue creado exitosamente
-if echo "$REPO_CREATE" | grep -q '"full_name":'; then
-    echo "Repositorio '$REPO_NAME' creado exitosamente como privado."
-else
-    echo "Error al crear el repositorio '$REPO_NAME'."
-    echo "$REPO_CREATE"
-    exit 1
+# --- Evitar colisión si ya hay un remoto 'origin' ---
+if git remote | grep -q '^origin$'; then
+  echo "Error: el repositorio local ya tiene un remoto 'origin' configurado." >&2
+  exit 1
 fi
 
-# Inicializar el repositorio local si no está ya inicializado
-if [ ! -d .git ]; then
-    git init
+# --- Crear repo privado en GitHub ---
+CREATE_PAYLOAD=$(printf '{"name":"%s","private":true,"auto_init":false,"visibility":"private"}' "$REPO_NAME")
+CREATE_RESP=$(curl -sS \
+  -H "Authorization: Bearer $GITHUB_TOKEN" \
+  -H "Accept: application/vnd.github+json" \
+  -X POST https://api.github.com/user/repos \
+  -d "$CREATE_PAYLOAD")
+
+if ! echo "$CREATE_RESP" | grep -q '"full_name"'; then
+  echo "Error al crear el repositorio '$REPO_NAME'." >&2
+  echo "$CREATE_RESP" >&2
+  exit 1
+fi
+echo "Repositorio remoto '$REPO_NAME' creado en $GITHUB_OWNER (privado)."
+
+# --- README por defecto si no existe ---
+if [[ ! -f README.md ]]; then
+  {
+    echo "# $REPO_NAME"
+    echo
+    echo "Repositorio creado automáticamente."
+  } > README.md
 fi
 
-# Crear un archivo README.md si no existe
-if [ ! -f README.md ]; then
-    echo "# $REPO_NAME" > README.md
-    echo "Este es un repositorio para $REPO_NAME." >> README.md
-    echo "Repositorio creado automáticamente con un script." >> README.md
-fi
-
-# Añadir todos los archivos al repositorio local y hacer el primer commit
+# --- Primer commit ---
 git add .
-git commit -m "Initial commit"
+if ! git diff --cached --quiet; then
+  git commit -m "Initial commit"
+fi
 
-# Añadir el repositorio remoto y hacer push utilizando SSH
-git remote add origin git@github.com:acuervoa/$REPO_NAME.git
+# --- Configurar remoto y rama principal ---
+git remote add origin "git@github.com:$GITHUB_OWNER/$REPO_NAME.git"
 git branch -M main
 
-# Verificar si la clave SSH está configurada correctamente
-ssh -T git@github.com
-if [ $? -ne 1 ]; then
-    echo "Error: no se pudo autenticar con GitHub mediante SSH. Verifique su configuración de SSH."
-    exit 1
+# --- Verificación de SSH hacia GitHub (salida esperada code=1 y mensaje 'does not provide shell') ---
+if ssh -T git@github.com 2>&1 | grep -q "successfully authenticated"; then
+  :
 fi
+# Nota: ssh -T suele devolver exit code 1 incluso en éxito. No abortamos por ese código.
 
-# Hacer push al repositorio remoto
+# --- Push inicial ---
 git push -u origin main
-if [ $? -ne 0 ]; then
-    echo "Error: no se pudo hacer push al repositorio remoto. Verifique los permisos y la URL remota."
-    exit 1
-fi
-
-echo "Directorio local rastreado como el repositorio remoto '$REPO_NAME'."
+echo "OK: repositorio local vinculado y publicado como '$GITHUB_OWNER/$REPO_NAME'."
 
