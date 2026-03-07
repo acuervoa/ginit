@@ -1,5 +1,22 @@
 # Changelog
 
+## v1.1.0
+
+- prepara el proyecto para publicarlo con licencia MIT, CI en GitHub Actions y documentacion mas completa
+- anade badges al README y aclara instalacion, permisos del token y troubleshooting
+- actualiza las pruebas para que `--version` siga el ultimo tag real del repo
+
+## v1.0.3
+
+- mejora `ginit --help` para mostrar el nombre real del comando invocado
+- anade una descripcion corta al inicio de la ayuda
+
+## v1.0.2
+
+- anade `--version` para mostrar el ultimo tag disponible
+- incorpora `CHANGELOG.md`
+- documenta el nuevo flag y lo cubre con una prueba automatizada
+
 ## v1.0.1
 
 - corrige la perdida de `API_STATUS` al salir de subshells

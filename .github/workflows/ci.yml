@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  shell:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install ShellCheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+
+      - name: Bash syntax check
+        run: bash -n ginit.sh
+
+      - name: ShellCheck
+        run: shellcheck ginit.sh tests/*.sh
+
+      - name: Version flag regression
+        run: bash tests/version_flag.sh
+
+      - name: API status regression
+        run: bash tests/api_status_regression.sh

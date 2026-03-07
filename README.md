@@ -1,6 +1,10 @@
-# ginit.sh
+# ginit
 
-`ginit.sh` crea un repositorio de GitHub desde el directorio actual, inicializa Git cuando hace falta, realiza un primer commit, configura `origin` y publica `main`.
+[![CI](https://github.com/acuervoa/ginit/actions/workflows/ci.yml/badge.svg)](https://github.com/acuervoa/ginit/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/acuervoa/ginit)](https://github.com/acuervoa/ginit/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+`ginit` crea un repositorio de GitHub desde el directorio actual, inicializa Git cuando hace falta, realiza un primer commit, configura `origin` y publica `main`.
 
 ## Caracteristicas
 
@@ -13,41 +17,68 @@
 - Incluye un modo `--dry-run` para validar sin tocar nada.
 - Muestra la version instalada con `--version`.
 
+## Instalacion
+
+Coloca el repositorio en una ruta estable, por ejemplo:
+
+```bash
+mkdir -p ~/.local/share
+git clone https://github.com/acuervoa/ginit.git ~/.local/share/ginit
+chmod +x ~/.local/share/ginit/ginit.sh
+ln -sf ~/.local/share/ginit/ginit.sh ~/.local/bin/ginit
+```
+
+Asegurate de tener `~/.local/bin` en tu `PATH`.
+
 ## Requisitos
 
 - `git`
 - `curl`
-- Un personal access token de GitHub con permisos para crear repositorios.
-- SSH configurado para GitHub si usas el modo remoto `ssh`, que es el predeterminado.
+- `bash`
+- `ssh` si usas el modo remoto `ssh`, que es el predeterminado
 
 ## Configuracion
 
-Crea un archivo `.env` junto a `ginit.sh` usando `.env.EXAMPLE` como plantilla:
+`ginit` carga el archivo `.env` que vive junto al script instalado, no el del proyecto donde lo ejecutas.
+
+Si instalaste el comando como en el ejemplo anterior, crea este archivo:
 
 ```env
+# ~/.local/share/ginit/.env
 GITHUB_TOKEN=your_token_here
 GITHUB_OWNER=your_github_user_or_org
 ```
 
+Tambien puedes copiar `.env.EXAMPLE` y completarlo.
+
+### Permisos del token
+
+- PAT clasico: permiso `repo`
+- Fine-grained token: permisos para crear repositorios en el owner que uses
+- Si `GITHUB_OWNER` es una organizacion, el token debe poder crear repos en esa organizacion
+
 ## Uso
 
 ```bash
-./ginit.sh [repo-name] [--private|--public] [--remote ssh|https] [--no-commit] [--dry-run] [--version]
+ginit [repo-name] [--private|--public] [--remote ssh|https] [--no-commit] [--dry-run] [--version]
 ```
 
 Ejemplos:
 
 ```bash
-./ginit.sh
-./ginit.sh my-new-repo
-./ginit.sh my-public-repo --public
-./ginit.sh my-repo --remote https
-./ginit.sh my-repo --no-commit
-./ginit.sh my-repo --dry-run
-./ginit.sh --version
+ginit
+ginit my-new-repo
+ginit my-public-repo --public
+ginit my-repo --remote https
+ginit my-repo --no-commit
+ginit my-repo --dry-run
+ginit --version
+ginit --help
 ```
 
 Si omites `repo-name`, el script usa el nombre del directorio actual.
+
+No uses `ginit .`: `.` no es un nombre de repositorio valido en GitHub.
 
 ## Controles de seguridad
 
@@ -60,10 +91,30 @@ Antes de publicar, el script:
 - verifica la autenticacion SSH cuando usas `--remote ssh`
 - aborta si detecta archivos probablemente sensibles que no estan ignorados
 
-## Notas
+## Troubleshooting
 
-- `--private` es el modo predeterminado.
-- Con `--no-commit`, se crea el remoto y se configura `origin`, pero no se hace ningun push.
-- Con `--dry-run`, el script muestra las acciones que haria y evita cambios locales y remotos.
-- Con `--version`, el script intenta mostrar el ultimo tag disponible y usa `dev` como fallback.
-- El script avisa si el repositorio remoto llego a crearse pero un paso posterior fallo.
+- `Bad credentials`
+  - revisa `GITHUB_TOKEN` en el `.env` del directorio de instalacion de `ginit`
+- `invalid remote mode`
+  - usa solo `ssh` o `https`
+- `repository '.' already exists` o nombre invalido
+  - ejecuta `ginit` o `ginit nombre-del-repo`, no `ginit .`
+- fallo con SSH
+  - prueba `ginit --remote https` o configura tu clave SSH en GitHub
+
+## Desarrollo
+
+Comprobaciones locales:
+
+```bash
+bash -n ginit.sh
+bash tests/version_flag.sh
+bash tests/api_status_regression.sh
+shellcheck ginit.sh tests/*.sh
+```
+
+El repo incluye CI en GitHub Actions para ejecutar estas comprobaciones en cada push y pull request.
+
+## Licencia
+
+MIT. Consulta `LICENSE`.
