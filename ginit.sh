@@ -54,9 +54,15 @@ fatal() {
 }
 
 usage() {
-  cat <<'EOF'
+  local command_name
+
+  command_name="$(basename "$0")"
+
+  cat <<EOF
+Create and publish a GitHub repository from the current directory.
+
 Usage:
-  ginit.sh [repo-name] [--private|--public] [--remote ssh|https] [--no-commit] [--dry-run] [--version] [--help]
+  ${command_name} [repo-name] [--private|--public] [--remote ssh|https] [--no-commit] [--dry-run] [--version] [--help]
 
 Options:
   repo-name         Repository name. Defaults to the current directory name.
