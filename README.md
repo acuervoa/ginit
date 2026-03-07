@@ -1,36 +1,66 @@
 # ginit.sh
 
-Este script automatiza la creación de un repositorio en GitHub y configura el directorio local para rastrear ese repositorio. A continuación se detallan los pasos para su uso y configuración.
+`ginit.sh` creates a GitHub repository from the current directory, initializes Git when needed, adds a first commit, configures `origin`, and pushes `main`.
 
-## Requisitos
+## Features
 
-- Tener `git` instalado en tu sistema.
-- Tener una cuenta de GitHub.
-- Generar un token de acceso personal en GitHub con permisos para crear repositorios.
-- Configurar una clave SSH y añadirla a tu cuenta de GitHub para autenticación SSH.
+- Works from any directory and resolves its own `.env` file.
+- Supports GitHub users and organizations.
+- Creates private repositories by default.
+- Supports `ssh` or `https` remotes.
+- Blocks common sensitive files before staging.
+- Can skip the first commit with `--no-commit`.
+- Includes a `--dry-run` mode for safe validation.
 
-## Preparación
+## Requirements
 
-1. Crea un archivo `.env` en el mismo directorio que `ginit.sh` con el siguiente contenido:
+- `git`
+- `curl`
+- A GitHub personal access token with repository creation permissions.
+- SSH configured for GitHub if you use the default `ssh` remote mode.
 
-    ```env
-    GITHUB_TOKEN=tu_token_de_github
-    ```
+## Configuration
 
-2. Asegúrate de que `ginit.sh` tenga permisos de ejecución:
+Create `.env` next to `ginit.sh` using `.env.EXAMPLE` as a template:
 
-    ```bash
-    chmod +x ginit.sh
-    ```
+```env
+GITHUB_TOKEN=your_token_here
+GITHUB_OWNER=your_github_user_or_org
+```
 
-## Uso
-
-Puedes ejecutar el script desde cualquier directorio. El script tomará el nombre del directorio actual como el nombre del repositorio si no se proporciona un nombre de repositorio como parámetro.
-
-### Ejecución sin parámetros
-
-Si ejecutas el script sin proporcionar un nombre de repositorio, usará el nombre del directorio actual:
+## Usage
 
 ```bash
-/path/al/directorio/del/script/ginit.sh
+./ginit.sh [repo-name] [--private|--public] [--remote ssh|https] [--no-commit] [--dry-run]
+```
 
+Examples:
+
+```bash
+./ginit.sh
+./ginit.sh my-new-repo
+./ginit.sh my-public-repo --public
+./ginit.sh my-repo --remote https
+./ginit.sh my-repo --no-commit
+./ginit.sh my-repo --dry-run
+```
+
+If `repo-name` is omitted, the script uses the current directory name.
+
+## Safety checks
+
+Before publishing, the script:
+
+- validates the GitHub token
+- detects whether `GITHUB_OWNER` is a user or organization
+- checks that the target repository does not already exist
+- refuses to continue if `origin` already exists locally
+- verifies SSH authentication when `--remote ssh` is used
+- aborts if likely sensitive files are present and not ignored
+
+## Notes
+
+- `--private` is the default mode.
+- With `--no-commit`, the remote is created and `origin` is configured, but nothing is pushed.
+- With `--dry-run`, the script prints the actions it would take and skips local and remote mutations.
+- The script warns if the remote repository was created but a later step failed.
