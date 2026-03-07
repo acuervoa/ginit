@@ -8,6 +8,8 @@ Spanish version: [`README_ES.md`](README_ES.md)
 
 Latest release notes: [`CHANGELOG.md`](CHANGELOG.md)
 
+Spanish changelog: [`CHANGELOG_ES.md`](CHANGELOG_ES.md)
+
 `ginit` creates a GitHub repository from the current directory, initializes Git when needed, creates an initial commit, configures `origin`, and publishes `main`.
 
 ## Features
@@ -118,6 +120,8 @@ shellcheck ginit.sh tests/*.sh
 ```
 
 The repository includes GitHub Actions CI to run these checks on every push and pull request.
+
+Release notes are written in English by default. Use `.github/RELEASE_TEMPLATE.md` as the starting point for future releases.
 
 ## License
 

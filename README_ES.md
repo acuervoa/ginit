@@ -6,7 +6,9 @@
 
 English version: [`README.md`](README.md)
 
-Ultimas notas de release: [`CHANGELOG.md`](CHANGELOG.md)
+Ultimas notas de release: [`CHANGELOG_ES.md`](CHANGELOG_ES.md)
+
+Changelog en ingles: [`CHANGELOG.md`](CHANGELOG.md)
 
 `ginit` crea un repositorio de GitHub desde el directorio actual, inicializa Git cuando hace falta, realiza un primer commit, configura `origin` y publica `main`.
 
@@ -118,6 +120,8 @@ shellcheck ginit.sh tests/*.sh
 ```
 
 El repo incluye CI en GitHub Actions para ejecutar estas comprobaciones en cada push y pull request.
+
+Las notas de release se redactan por defecto en ingles. Usa `.github/RELEASE_TEMPLATE.md` como punto de partida para futuras releases.
 
 ## Licencia
 

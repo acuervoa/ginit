@@ -1,33 +1,37 @@
 # Changelog
 
+Spanish version: [`CHANGELOG_ES.md`](CHANGELOG_ES.md)
+
+Release notes default to English. For future releases, start from [`.github/RELEASE_TEMPLATE.md`](.github/RELEASE_TEMPLATE.md).
+
 ## v1.1.0
 
-- prepara el proyecto para publicarlo con licencia MIT, CI en GitHub Actions y documentacion mas completa
-- anade badges al README y aclara instalacion, permisos del token y troubleshooting
-- actualiza las pruebas para que `--version` siga el ultimo tag real del repo
+- prepare the project for public release with an MIT license, GitHub Actions CI, and fuller documentation
+- add README badges and clarify installation, token permissions, and troubleshooting
+- update the tests so `--version` follows the latest real tag in the repository
 
 ## v1.0.3
 
-- mejora `ginit --help` para mostrar el nombre real del comando invocado
-- anade una descripcion corta al inicio de la ayuda
+- improve `ginit --help` so it shows the actual invoked command name
+- add a short description at the top of the help output
 
 ## v1.0.2
 
-- anade `--version` para mostrar el ultimo tag disponible
-- incorpora `CHANGELOG.md`
-- documenta el nuevo flag y lo cubre con una prueba automatizada
+- add `--version` to show the latest available tag
+- introduce `CHANGELOG.md`
+- document the new flag and cover it with an automated test
 
 ## v1.0.1
 
-- corrige la perdida de `API_STATUS` al salir de subshells
-- anade una prueba de regresion para el flujo de autenticacion
+- fix the loss of `API_STATUS` when returning from subshells
+- add a regression test for the authentication flow
 
 ## v1.0.0
 
-- endurece `ginit.sh` con validaciones mas estrictas y manejo de errores mas claro
-- anade `--dry-run` para previsualizar cambios sin tocar estado local ni remoto
-- actualiza la documentacion y `.env.EXAMPLE`
+- harden `ginit.sh` with stricter validation and clearer error handling
+- add `--dry-run` to preview changes without modifying local or remote state
+- update the documentation and `.env.EXAMPLE`
 
 ## v1.0.0-rc.1
 
-- publica la release candidate inicial de la refactorizacion endurecida
+- publish the initial hardened refactor release candidate
