@@ -4,6 +4,8 @@
 [![Release](https://img.shields.io/github/v/release/acuervoa/ginit)](https://github.com/acuervoa/ginit/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+Version en ingles: [`README_EN.md`](README_EN.md)
+
 `ginit` crea un repositorio de GitHub desde el directorio actual, inicializa Git cuando hace falta, realiza un primer commit, configura `origin` y publica `main`.
 
 ## Caracteristicas
