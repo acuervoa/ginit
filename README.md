@@ -1,40 +1,40 @@
 # ginit.sh
 
-`ginit.sh` creates a GitHub repository from the current directory, initializes Git when needed, adds a first commit, configures `origin`, and pushes `main`.
+`ginit.sh` crea un repositorio de GitHub desde el directorio actual, inicializa Git cuando hace falta, realiza un primer commit, configura `origin` y publica `main`.
 
-## Features
+## Caracteristicas
 
-- Works from any directory and resolves its own `.env` file.
-- Supports GitHub users and organizations.
-- Creates private repositories by default.
-- Supports `ssh` or `https` remotes.
-- Blocks common sensitive files before staging.
-- Can skip the first commit with `--no-commit`.
-- Includes a `--dry-run` mode for safe validation.
+- Funciona desde cualquier directorio y resuelve su propio archivo `.env`.
+- Soporta usuarios y organizaciones de GitHub.
+- Crea repositorios privados por defecto.
+- Soporta remotos `ssh` o `https`.
+- Bloquea archivos sensibles comunes antes de hacer staging.
+- Puede omitir el primer commit con `--no-commit`.
+- Incluye un modo `--dry-run` para validar sin tocar nada.
 
-## Requirements
+## Requisitos
 
 - `git`
 - `curl`
-- A GitHub personal access token with repository creation permissions.
-- SSH configured for GitHub if you use the default `ssh` remote mode.
+- Un personal access token de GitHub con permisos para crear repositorios.
+- SSH configurado para GitHub si usas el modo remoto `ssh`, que es el predeterminado.
 
-## Configuration
+## Configuracion
 
-Create `.env` next to `ginit.sh` using `.env.EXAMPLE` as a template:
+Crea un archivo `.env` junto a `ginit.sh` usando `.env.EXAMPLE` como plantilla:
 
 ```env
 GITHUB_TOKEN=your_token_here
 GITHUB_OWNER=your_github_user_or_org
 ```
 
-## Usage
+## Uso
 
 ```bash
 ./ginit.sh [repo-name] [--private|--public] [--remote ssh|https] [--no-commit] [--dry-run]
 ```
 
-Examples:
+Ejemplos:
 
 ```bash
 ./ginit.sh
@@ -45,22 +45,22 @@ Examples:
 ./ginit.sh my-repo --dry-run
 ```
 
-If `repo-name` is omitted, the script uses the current directory name.
+Si omites `repo-name`, el script usa el nombre del directorio actual.
 
-## Safety checks
+## Controles de seguridad
 
-Before publishing, the script:
+Antes de publicar, el script:
 
-- validates the GitHub token
-- detects whether `GITHUB_OWNER` is a user or organization
-- checks that the target repository does not already exist
-- refuses to continue if `origin` already exists locally
-- verifies SSH authentication when `--remote ssh` is used
-- aborts if likely sensitive files are present and not ignored
+- valida el token de GitHub
+- detecta si `GITHUB_OWNER` es un usuario o una organizacion
+- comprueba que el repositorio de destino no exista ya
+- se niega a continuar si `origin` ya existe en local
+- verifica la autenticacion SSH cuando usas `--remote ssh`
+- aborta si detecta archivos probablemente sensibles que no estan ignorados
 
-## Notes
+## Notas
 
-- `--private` is the default mode.
-- With `--no-commit`, the remote is created and `origin` is configured, but nothing is pushed.
-- With `--dry-run`, the script prints the actions it would take and skips local and remote mutations.
-- The script warns if the remote repository was created but a later step failed.
+- `--private` es el modo predeterminado.
+- Con `--no-commit`, se crea el remoto y se configura `origin`, pero no se hace ningun push.
+- Con `--dry-run`, el script muestra las acciones que haria y evita cambios locales y remotos.
+- El script avisa si el repositorio remoto llego a crearse pero un paso posterior fallo.
