@@ -4,6 +4,24 @@ English version: [`CHANGELOG.md`](CHANGELOG.md)
 
 Las release notes se redactan por defecto en ingles. Para futuras releases, parte de [`.github/RELEASE_TEMPLATE.md`](.github/RELEASE_TEMPLATE.md).
 
+## v1.1.3
+
+- anade un `CHANGELOG.md` en ingles y un `CHANGELOG_ES.md` en espanol
+- hace que CI recupere tags y endurece la prueba de version para entornos sin tags
+- anade `.github/RELEASE_TEMPLATE.md` para que las futuras release notes arranquen en ingles por defecto
+
+## v1.1.2
+
+- deja el ingles como README por defecto en GitHub
+- mueve la guia en espanol a `README_ES.md`
+- mantiene enlaces cruzados entre ambas versiones de la documentacion
+
+## v1.1.1
+
+- anade `README_EN.md` con una guia completa en ingles
+- enlaza entre si la documentacion en espanol e ingles
+- enlaza la guia en ingles con el changelog
+
 ## v1.1.0
 
 - prepara el proyecto para publicarlo con licencia MIT, CI en GitHub Actions y documentacion mas completa

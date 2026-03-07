@@ -4,6 +4,24 @@ Spanish version: [`CHANGELOG_ES.md`](CHANGELOG_ES.md)
 
 Release notes default to English. For future releases, start from [`.github/RELEASE_TEMPLATE.md`](.github/RELEASE_TEMPLATE.md).
 
+## v1.1.3
+
+- add an English-first `CHANGELOG.md` and a Spanish `CHANGELOG_ES.md`
+- make CI fetch tags and harden the version regression test for tagless environments
+- add `.github/RELEASE_TEMPLATE.md` so future release notes start in English by default
+
+## v1.1.2
+
+- make English the default GitHub README
+- move the Spanish guide to `README_ES.md`
+- keep cross-links between both documentation versions
+
+## v1.1.1
+
+- add `README_EN.md` with a full English guide
+- cross-link the Spanish and English documentation
+- link the English guide to the changelog
+
 ## v1.1.0
 
 - prepare the project for public release with an MIT license, GitHub Actions CI, and fuller documentation
