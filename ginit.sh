@@ -19,6 +19,8 @@ REPO_NAME=""
 
 OWNER_TYPE=""
 CREATED_REMOTE=0
+API_STATUS=""
+API_BODY=""
 
 cleanup_on_error() {
   local exit_code=$?
@@ -155,25 +157,22 @@ api_request() {
   fi
 
   API_STATUS="${response##*$'\n'}"
-  printf '%s' "${response%$'\n'*}"
+  API_BODY="${response%$'\n'*}"
 }
 
 validate_token() {
-  local body
-
   if [[ $DRY_RUN -eq 1 ]]; then
     dry_run_note "would validate GITHUB_TOKEN against GitHub"
     return
   fi
 
-  body="$(api_request GET "https://api.github.com/user")"
+  api_request GET "https://api.github.com/user"
   if [[ "$API_STATUS" != "200" ]]; then
-    fatal "invalid token or insufficient permissions (HTTP $API_STATUS). Response: $body"
+    fatal "invalid token or insufficient permissions (HTTP $API_STATUS). Response: $API_BODY"
   fi
 }
 
 resolve_owner_type() {
-  local body
   local org_regex='"type"[[:space:]]*:[[:space:]]*"Organization"'
   local user_regex='"type"[[:space:]]*:[[:space:]]*"User"'
 
@@ -183,7 +182,7 @@ resolve_owner_type() {
     return
   fi
 
-  body="$(api_request GET "https://api.github.com/users/$GITHUB_OWNER")"
+  api_request GET "https://api.github.com/users/$GITHUB_OWNER"
   case "$API_STATUS" in
     200)
       ;;
@@ -191,13 +190,13 @@ resolve_owner_type() {
       fatal "GitHub owner '$GITHUB_OWNER' does not exist or is not visible with the current token"
       ;;
     *)
-      fatal "could not inspect GitHub owner '$GITHUB_OWNER' (HTTP $API_STATUS). Response: $body"
+      fatal "could not inspect GitHub owner '$GITHUB_OWNER' (HTTP $API_STATUS). Response: $API_BODY"
       ;;
   esac
 
-  if [[ "$body" =~ $org_regex ]]; then
+  if [[ "$API_BODY" =~ $org_regex ]]; then
     OWNER_TYPE="Organization"
-  elif [[ "$body" =~ $user_regex ]]; then
+  elif [[ "$API_BODY" =~ $user_regex ]]; then
     OWNER_TYPE="User"
   else
     fatal "could not determine whether '$GITHUB_OWNER' is a user or organization"
@@ -205,14 +204,12 @@ resolve_owner_type() {
 }
 
 check_remote_repo_absent() {
-  local body
-
   if [[ $DRY_RUN -eq 1 ]]; then
     dry_run_note "would verify that '$GITHUB_OWNER/$REPO_NAME' does not already exist"
     return
   fi
 
-  body="$(api_request GET "https://api.github.com/repos/$GITHUB_OWNER/$REPO_NAME")"
+  api_request GET "https://api.github.com/repos/$GITHUB_OWNER/$REPO_NAME"
   case "$API_STATUS" in
     404)
       ;;
@@ -220,7 +217,7 @@ check_remote_repo_absent() {
       fatal "repository '$REPO_NAME' already exists in $GITHUB_OWNER"
       ;;
     *)
-      fatal "unexpected response while checking repository existence (HTTP $API_STATUS). Response: $body"
+      fatal "unexpected response while checking repository existence (HTTP $API_STATUS). Response: $API_BODY"
       ;;
   esac
 }
@@ -329,7 +326,6 @@ EOF
 create_remote_repository() {
   local url
   local payload
-  local body
 
   if [[ "$OWNER_TYPE" == "Organization" ]]; then
     url="https://api.github.com/orgs/$GITHUB_OWNER/repos"
@@ -348,9 +344,9 @@ create_remote_repository() {
     return
   fi
 
-  body="$(api_request POST "$url" "$payload")"
+  api_request POST "$url" "$payload"
   if [[ "$API_STATUS" != "201" ]]; then
-    fatal "failed to create repository '$REPO_NAME' in $GITHUB_OWNER (HTTP $API_STATUS). Response: $body"
+    fatal "failed to create repository '$REPO_NAME' in $GITHUB_OWNER (HTTP $API_STATUS). Response: $API_BODY"
   fi
 
   CREATED_REMOTE=1
@@ -453,4 +449,6 @@ main() {
   info "OK: local repository linked and published as '$GITHUB_OWNER/$REPO_NAME'."
 }
 
-main "$@"
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+  main "$@"
+fi
