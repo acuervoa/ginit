@@ -15,6 +15,7 @@ VISIBILITY="private"
 REMOTE_MODE="ssh"
 DO_COMMIT=1
 DRY_RUN=0
+SHOW_VERSION=0
 REPO_NAME=""
 
 OWNER_TYPE=""
@@ -55,7 +56,7 @@ fatal() {
 usage() {
   cat <<'EOF'
 Usage:
-  ginit.sh [repo-name] [--private|--public] [--remote ssh|https] [--no-commit] [--dry-run] [--help]
+  ginit.sh [repo-name] [--private|--public] [--remote ssh|https] [--no-commit] [--dry-run] [--version] [--help]
 
 Options:
   repo-name         Repository name. Defaults to the current directory name.
@@ -64,8 +65,20 @@ Options:
   --remote MODE     Remote URL mode: ssh (default) or https.
   --no-commit       Skip the initial commit.
   --dry-run         Print planned actions without changing local or remote state.
+  --version         Show the installed ginit version.
   --help, -h        Show this help message.
 EOF
+}
+
+script_version() {
+  local version
+
+  if version="$(git -C "$SCRIPT_DIR" describe --tags --abbrev=0 2>/dev/null)"; then
+    printf '%s\n' "$version"
+    return
+  fi
+
+  printf 'dev\n'
 }
 
 require_command() {
@@ -112,6 +125,9 @@ parse_args() {
         ;;
       --dry-run)
         DRY_RUN=1
+        ;;
+      --version)
+        SHOW_VERSION=1
         ;;
       --help|-h)
         usage
@@ -423,10 +439,15 @@ push_initial_branch() {
 }
 
 main() {
+  parse_args "$@"
+
+  if [[ $SHOW_VERSION -eq 1 ]]; then
+    script_version
+    return
+  fi
+
   require_command git
   require_command curl
-
-  parse_args "$@"
   load_env
   validate_token
   resolve_owner_type

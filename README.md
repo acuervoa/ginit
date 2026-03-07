@@ -11,6 +11,7 @@
 - Bloquea archivos sensibles comunes antes de hacer staging.
 - Puede omitir el primer commit con `--no-commit`.
 - Incluye un modo `--dry-run` para validar sin tocar nada.
+- Muestra la version instalada con `--version`.
 
 ## Requisitos
 
@@ -31,7 +32,7 @@ GITHUB_OWNER=your_github_user_or_org
 ## Uso
 
 ```bash
-./ginit.sh [repo-name] [--private|--public] [--remote ssh|https] [--no-commit] [--dry-run]
+./ginit.sh [repo-name] [--private|--public] [--remote ssh|https] [--no-commit] [--dry-run] [--version]
 ```
 
 Ejemplos:
@@ -43,6 +44,7 @@ Ejemplos:
 ./ginit.sh my-repo --remote https
 ./ginit.sh my-repo --no-commit
 ./ginit.sh my-repo --dry-run
+./ginit.sh --version
 ```
 
 Si omites `repo-name`, el script usa el nombre del directorio actual.
@@ -63,4 +65,5 @@ Antes de publicar, el script:
 - `--private` es el modo predeterminado.
 - Con `--no-commit`, se crea el remoto y se configura `origin`, pero no se hace ningun push.
 - Con `--dry-run`, el script muestra las acciones que haria y evita cambios locales y remotos.
+- Con `--version`, el script intenta mostrar el ultimo tag disponible y usa `dev` como fallback.
 - El script avisa si el repositorio remoto llego a crearse pero un paso posterior fallo.
