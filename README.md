@@ -4,24 +4,26 @@
 [![Release](https://img.shields.io/github/v/release/acuervoa/ginit)](https://github.com/acuervoa/ginit/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Version en ingles: [`README_EN.md`](README_EN.md)
+Spanish version: [`README_ES.md`](README_ES.md)
 
-`ginit` crea un repositorio de GitHub desde el directorio actual, inicializa Git cuando hace falta, realiza un primer commit, configura `origin` y publica `main`.
+Latest release notes: [`CHANGELOG.md`](CHANGELOG.md)
 
-## Caracteristicas
+`ginit` creates a GitHub repository from the current directory, initializes Git when needed, creates an initial commit, configures `origin`, and publishes `main`.
 
-- Funciona desde cualquier directorio y resuelve su propio archivo `.env`.
-- Soporta usuarios y organizaciones de GitHub.
-- Crea repositorios privados por defecto.
-- Soporta remotos `ssh` o `https`.
-- Bloquea archivos sensibles comunes antes de hacer staging.
-- Puede omitir el primer commit con `--no-commit`.
-- Incluye un modo `--dry-run` para validar sin tocar nada.
-- Muestra la version instalada con `--version`.
+## Features
 
-## Instalacion
+- Works from any directory and resolves its own `.env` file.
+- Supports both GitHub users and organizations.
+- Creates private repositories by default.
+- Supports `ssh` and `https` remotes.
+- Blocks common sensitive files before staging.
+- Can skip the initial commit with `--no-commit`.
+- Includes a `--dry-run` mode for safe validation.
+- Shows the installed version with `--version`.
 
-Coloca el repositorio en una ruta estable, por ejemplo:
+## Installation
+
+Place the repository in a stable path, for example:
 
 ```bash
 mkdir -p ~/.local/share
@@ -30,20 +32,20 @@ chmod +x ~/.local/share/ginit/ginit.sh
 ln -sf ~/.local/share/ginit/ginit.sh ~/.local/bin/ginit
 ```
 
-Asegurate de tener `~/.local/bin` en tu `PATH`.
+Make sure `~/.local/bin` is in your `PATH`.
 
-## Requisitos
+## Requirements
 
 - `git`
 - `curl`
 - `bash`
-- `ssh` si usas el modo remoto `ssh`, que es el predeterminado
+- `ssh` if you use the default `ssh` remote mode
 
-## Configuracion
+## Configuration
 
-`ginit` carga el archivo `.env` que vive junto al script instalado, no el del proyecto donde lo ejecutas.
+`ginit` loads the `.env` file stored next to the installed script, not the one from the project where you run it.
 
-Si instalaste el comando como en el ejemplo anterior, crea este archivo:
+If you installed the command as shown above, create this file:
 
 ```env
 # ~/.local/share/ginit/.env
@@ -51,21 +53,21 @@ GITHUB_TOKEN=your_token_here
 GITHUB_OWNER=your_github_user_or_org
 ```
 
-Tambien puedes copiar `.env.EXAMPLE` y completarlo.
+You can also copy `.env.EXAMPLE` and fill it in.
 
-### Permisos del token
+### Token permissions
 
-- PAT clasico: permiso `repo`
-- Fine-grained token: permisos para crear repositorios en el owner que uses
-- Si `GITHUB_OWNER` es una organizacion, el token debe poder crear repos en esa organizacion
+- Classic PAT: `repo`
+- Fine-grained token: permissions to create repositories in the selected owner
+- If `GITHUB_OWNER` is an organization, the token must be allowed to create repositories in that organization
 
-## Uso
+## Usage
 
 ```bash
 ginit [repo-name] [--private|--public] [--remote ssh|https] [--no-commit] [--dry-run] [--version]
 ```
 
-Ejemplos:
+Examples:
 
 ```bash
 ginit
@@ -78,35 +80,35 @@ ginit --version
 ginit --help
 ```
 
-Si omites `repo-name`, el script usa el nombre del directorio actual.
+If `repo-name` is omitted, the script uses the current directory name.
 
-No uses `ginit .`: `.` no es un nombre de repositorio valido en GitHub.
+Do not use `ginit .`: `.` is not a valid GitHub repository name.
 
-## Controles de seguridad
+## Safety checks
 
-Antes de publicar, el script:
+Before publishing, the script:
 
-- valida el token de GitHub
-- detecta si `GITHUB_OWNER` es un usuario o una organizacion
-- comprueba que el repositorio de destino no exista ya
-- se niega a continuar si `origin` ya existe en local
-- verifica la autenticacion SSH cuando usas `--remote ssh`
-- aborta si detecta archivos probablemente sensibles que no estan ignorados
+- validates the GitHub token
+- detects whether `GITHUB_OWNER` is a user or an organization
+- checks that the target repository does not already exist
+- refuses to continue if `origin` already exists locally
+- verifies SSH authentication when `--remote ssh` is used
+- aborts if it finds likely sensitive files that are not ignored
 
 ## Troubleshooting
 
 - `Bad credentials`
-  - revisa `GITHUB_TOKEN` en el `.env` del directorio de instalacion de `ginit`
+  - check `GITHUB_TOKEN` in the `.env` file located in the `ginit` installation directory
 - `invalid remote mode`
-  - usa solo `ssh` o `https`
-- `repository '.' already exists` o nombre invalido
-  - ejecuta `ginit` o `ginit nombre-del-repo`, no `ginit .`
-- fallo con SSH
-  - prueba `ginit --remote https` o configura tu clave SSH en GitHub
+  - use only `ssh` or `https`
+- invalid repository name or `ginit .`
+  - run `ginit` or `ginit your-repo-name`, not `ginit .`
+- SSH failure
+  - try `ginit --remote https` or configure your SSH key in GitHub
 
-## Desarrollo
+## Development
 
-Comprobaciones locales:
+Local checks:
 
 ```bash
 bash -n ginit.sh
@@ -115,8 +117,8 @@ bash tests/api_status_regression.sh
 shellcheck ginit.sh tests/*.sh
 ```
 
-El repo incluye CI en GitHub Actions para ejecutar estas comprobaciones en cada push y pull request.
+The repository includes GitHub Actions CI to run these checks on every push and pull request.
 
-## Licencia
+## License
 
-MIT. Consulta `LICENSE`.
+MIT. See `LICENSE`.
