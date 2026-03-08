@@ -10,6 +10,8 @@ Latest release notes: [`CHANGELOG.md`](CHANGELOG.md)
 
 Spanish changelog: [`CHANGELOG_ES.md`](CHANGELOG_ES.md)
 
+Current LTS baseline: `v1.5.2`
+
 `ginit` creates a GitHub repository from the current directory, initializes Git when needed, creates an initial commit, configures `origin`, and publishes `main`.
 
 ## Features

@@ -6,6 +6,8 @@ Release notes default to English. For future releases, start from [`.github/RELE
 
 ## Unreleased
 
+`v1.5.2` is the current LTS baseline.
+
 ## v1.5.1
 
 - backfill `CHANGELOG.md` and `CHANGELOG_ES.md` so the published changelog matches releases from `v1.2.0` through `v1.5.0`

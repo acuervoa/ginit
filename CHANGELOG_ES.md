@@ -6,6 +6,8 @@ Las release notes se redactan por defecto en ingles. Para futuras releases, part
 
 ## Unreleased
 
+`v1.5.2` es la baseline LTS actual.
+
 ## v1.5.1
 
 - completa `CHANGELOG.md` y `CHANGELOG_ES.md` para que el changelog publicado refleje las releases desde `v1.2.0` hasta `v1.5.0`

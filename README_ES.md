@@ -10,6 +10,8 @@ Ultimas notas de release: [`CHANGELOG_ES.md`](CHANGELOG_ES.md)
 
 Changelog en ingles: [`CHANGELOG.md`](CHANGELOG.md)
 
+Baseline LTS actual: `v1.5.2`
+
 `ginit` crea un repositorio de GitHub desde el directorio actual, inicializa Git cuando hace falta, realiza un primer commit, configura `origin` y publica `main`.
 
 ## Caracteristicas
