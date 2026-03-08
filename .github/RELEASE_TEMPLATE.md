@@ -6,3 +6,4 @@
 ## Notes
 - default release language: English
 - link `CHANGELOG.md` when more detail is needed
+- promote items from `## Unreleased` into the new version section before tagging

@@ -159,6 +159,24 @@ parse_args() {
   [[ -n "$REPO_NAME" ]] || fatal "could not determine repository name"
 }
 
+validate_repo_name() {
+  local repo_name="$1"
+
+  [[ -n "$repo_name" ]] || fatal "invalid repository name: cannot be empty"
+
+  if [[ "$repo_name" == "." || "$repo_name" == ".." ]]; then
+    fatal "invalid repository name: '$repo_name'"
+  fi
+
+  if [[ "$repo_name" =~ ^[.-] || "$repo_name" =~ [.]git$ || "$repo_name" =~ [/] || "$repo_name" =~ [[:space:]] ]]; then
+    fatal "invalid repository name: '$repo_name'"
+  fi
+
+  if [[ ! "$repo_name" =~ ^[A-Za-z0-9._-]+$ ]]; then
+    fatal "invalid repository name: '$repo_name'"
+  fi
+}
+
 api_request() {
   local method="$1"
   local url="$2"
@@ -446,6 +464,7 @@ push_initial_branch() {
 
 main() {
   parse_args "$@"
+  validate_repo_name "$REPO_NAME"
 
   if [[ $SHOW_VERSION -eq 1 ]]; then
     script_version

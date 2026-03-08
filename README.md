@@ -116,6 +116,10 @@ Local checks:
 bash -n ginit.sh
 bash tests/version_flag.sh
 bash tests/api_status_regression.sh
+bash tests/repo_name_validation.sh
+bash tests/dry_run_smoke.sh
+actionlint
+gitleaks detect --no-git --source . --redact --exit-code 1
 shellcheck ginit.sh tests/*.sh
 ```
 

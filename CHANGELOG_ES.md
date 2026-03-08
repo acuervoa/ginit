@@ -4,6 +4,16 @@ English version: [`CHANGELOG.md`](CHANGELOG.md)
 
 Las release notes se redactan por defecto en ingles. Para futuras releases, parte de [`.github/RELEASE_TEMPLATE.md`](.github/RELEASE_TEMPLATE.md).
 
+## Unreleased
+
+### Added
+- validacion local del nombre del repositorio antes de llamar a la API de GitHub
+- regresiones para validar nombres de repo y el flujo smoke de `--dry-run`
+- comprobaciones de CI con `actionlint` y `gitleaks`
+
+### Changed
+- la guia de release ahora asume una seccion `Unreleased` al inicio del changelog
+
 ## v1.1.3
 
 - anade un `CHANGELOG.md` en ingles y un `CHANGELOG_ES.md` en espanol

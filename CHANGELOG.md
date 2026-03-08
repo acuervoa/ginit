@@ -4,6 +4,16 @@ Spanish version: [`CHANGELOG_ES.md`](CHANGELOG_ES.md)
 
 Release notes default to English. For future releases, start from [`.github/RELEASE_TEMPLATE.md`](.github/RELEASE_TEMPLATE.md).
 
+## Unreleased
+
+### Added
+- local repository name validation before calling the GitHub API
+- repo-name validation and dry-run smoke regressions
+- CI checks for `actionlint` and `gitleaks`
+
+### Changed
+- release workflow guidance now assumes an `Unreleased` section at the top of the changelog
+
 ## v1.1.3
 
 - add an English-first `CHANGELOG.md` and a Spanish `CHANGELOG_ES.md`
