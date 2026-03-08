@@ -6,6 +6,11 @@ Release notes default to English. For future releases, start from [`.github/RELE
 
 ## Unreleased
 
+## v1.5.1
+
+- backfill `CHANGELOG.md` and `CHANGELOG_ES.md` so the published changelog matches releases from `v1.2.0` through `v1.5.0`
+- reset `Unreleased` to an empty state after the published releases
+
 ## v1.5.0
 
 - add `scripts/check.sh` as the single local quality command

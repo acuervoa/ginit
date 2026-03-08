@@ -6,6 +6,11 @@ Las release notes se redactan por defecto en ingles. Para futuras releases, part
 
 ## Unreleased
 
+## v1.5.1
+
+- completa `CHANGELOG.md` y `CHANGELOG_ES.md` para que el changelog publicado refleje las releases desde `v1.2.0` hasta `v1.5.0`
+- deja `Unreleased` vacio otra vez despues de las releases publicadas
+
 ## v1.5.0
 
 - anade `scripts/check.sh` como comando unico de calidad local
