@@ -16,6 +16,7 @@ Spanish changelog: [`CHANGELOG_ES.md`](CHANGELOG_ES.md)
 
 - Works from any directory and resolves its own `.env` file.
 - Supports both GitHub users and organizations.
+- Supports overriding the target owner with `--owner`.
 - Creates private repositories by default.
 - Supports `ssh` and `https` remotes.
 - Blocks common sensitive files before staging.
@@ -25,7 +26,13 @@ Spanish changelog: [`CHANGELOG_ES.md`](CHANGELOG_ES.md)
 
 ## Installation
 
-Place the repository in a stable path, for example:
+Recommended installer:
+
+```bash
+bash install.sh
+```
+
+Manual installation is also available if you prefer a cloned checkout in a stable path:
 
 ```bash
 mkdir -p ~/.local/share
@@ -66,7 +73,7 @@ You can also copy `.env.EXAMPLE` and fill it in.
 ## Usage
 
 ```bash
-ginit [repo-name] [--private|--public] [--remote ssh|https] [--no-commit] [--dry-run] [--version]
+ginit [repo-name] [--private|--public] [--remote ssh|https] [--owner OWNER] [--no-commit] [--dry-run] [--version]
 ```
 
 Examples:
@@ -74,6 +81,7 @@ Examples:
 ```bash
 ginit
 ginit my-new-repo
+ginit my-new-repo --owner my-org
 ginit my-public-repo --public
 ginit my-repo --remote https
 ginit my-repo --no-commit
@@ -83,6 +91,8 @@ ginit --help
 ```
 
 If `repo-name` is omitted, the script uses the current directory name.
+
+If `--owner` is omitted, `ginit` uses `GITHUB_OWNER` from `.env`.
 
 Do not use `ginit .`: `.` is not a valid GitHub repository name.
 
@@ -114,13 +124,15 @@ Local checks:
 
 ```bash
 bash -n ginit.sh
+bash -n install.sh
 bash tests/version_flag.sh
 bash tests/api_status_regression.sh
 bash tests/repo_name_validation.sh
+bash tests/owner_flag.sh
 bash tests/dry_run_smoke.sh
 actionlint
 gitleaks detect --no-git --source . --redact --exit-code 1
-shellcheck ginit.sh tests/*.sh
+shellcheck ginit.sh install.sh tests/*.sh
 ```
 
 The repository includes GitHub Actions CI to run these checks on every push and pull request.

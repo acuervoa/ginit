@@ -17,6 +17,7 @@ DO_COMMIT=1
 DRY_RUN=0
 SHOW_VERSION=0
 REPO_NAME=""
+OWNER_OVERRIDE=""
 
 OWNER_TYPE=""
 CREATED_REMOTE=0
@@ -62,13 +63,14 @@ usage() {
 Create and publish a GitHub repository from the current directory.
 
 Usage:
-  ${command_name} [repo-name] [--private|--public] [--remote ssh|https] [--no-commit] [--dry-run] [--version] [--help]
+  ${command_name} [repo-name] [--private|--public] [--remote ssh|https] [--owner OWNER] [--no-commit] [--dry-run] [--version] [--help]
 
 Options:
   repo-name         Repository name. Defaults to the current directory name.
   --private         Create a private repository (default).
   --public          Create a public repository.
   --remote MODE     Remote URL mode: ssh (default) or https.
+  --owner OWNER     Override GITHUB_OWNER for this invocation.
   --no-commit       Skip the initial commit.
   --dry-run         Print planned actions without changing local or remote state.
   --version         Show the installed ginit version.
@@ -103,6 +105,11 @@ load_env() {
 
   : "${GITHUB_TOKEN:?Define GITHUB_TOKEN in .env}"
   : "${GITHUB_OWNER:?Define GITHUB_OWNER in .env}"
+
+  if [[ -n "$OWNER_OVERRIDE" ]]; then
+    GITHUB_OWNER="$OWNER_OVERRIDE"
+    export GITHUB_OWNER
+  fi
 }
 
 parse_args() {
@@ -125,6 +132,11 @@ parse_args() {
             fatal "invalid remote mode: $1"
             ;;
         esac
+        ;;
+      --owner)
+        shift
+        [[ $# -gt 0 ]] || fatal "--owner requires a value"
+        OWNER_OVERRIDE="$1"
         ;;
       --no-commit)
         DO_COMMIT=0

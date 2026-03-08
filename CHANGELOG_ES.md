@@ -10,6 +10,8 @@ Las release notes se redactan por defecto en ingles. Para futuras releases, part
 - validacion local del nombre del repositorio antes de llamar a la API de GitHub
 - regresiones para validar nombres de repo y el flujo smoke de `--dry-run`
 - comprobaciones de CI con `actionlint` y `gitleaks`
+- un instalador para `~/.local/share/ginit` y `~/.local/bin/ginit`
+- soporte para sobrescribir el owner objetivo con `--owner`
 
 ### Changed
 - la guia de release ahora asume una seccion `Unreleased` al inicio del changelog

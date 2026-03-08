@@ -10,6 +10,8 @@ Release notes default to English. For future releases, start from [`.github/RELE
 - local repository name validation before calling the GitHub API
 - repo-name validation and dry-run smoke regressions
 - CI checks for `actionlint` and `gitleaks`
+- an installer script for `~/.local/share/ginit` and `~/.local/bin/ginit`
+- support for overriding the target owner with `--owner`
 
 ### Changed
 - release workflow guidance now assumes an `Unreleased` section at the top of the changelog
