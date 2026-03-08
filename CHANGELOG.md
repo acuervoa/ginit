@@ -6,15 +6,35 @@ Release notes default to English. For future releases, start from [`.github/RELE
 
 ## Unreleased
 
-### Added
-- support for `--description` during repository creation
-- support for `--homepage` during repository creation
-- homepage validation and dry-run payload regressions
-- a single `scripts/check.sh` command for local quality checks
-- API and SSH error-path regression tests for token, owner, repository, and auth failures
+## v1.5.0
 
-### Changed
-- `Unreleased` now tracks only post-`v1.3.1` work
+- add `scripts/check.sh` as the single local quality command
+- make GitHub Actions run the same local check suite
+- add regression tests for invalid token, missing owner, existing repository, and SSH authentication failures
+
+## v1.4.0
+
+- add `--description` and `--homepage` for repository creation metadata
+- validate homepage URLs locally and cover them with regression tests
+- clean up `Unreleased` to track only post-`v1.3.1` work
+
+## v1.3.1
+
+- preserve installed version metadata with a local `VERSION` file
+- make `ginit --version` prefer installed version metadata before Git tags or `dev`
+- add a regression test for installed version reporting
+
+## v1.3.0
+
+- add `install.sh` to install `ginit` into `~/.local/share/ginit` and link `~/.local/bin/ginit`
+- add `--owner` to override `GITHUB_OWNER` for a single invocation
+- add installer and owner-override regression coverage, including the CI fix for `actionlint` installation
+
+## v1.2.0
+
+- validate repository names locally before calling the GitHub API
+- add repo-name validation and `--dry-run` smoke regressions
+- harden CI with `actionlint`, `gitleaks`, and release workflow improvements
 
 ## v1.1.3
 

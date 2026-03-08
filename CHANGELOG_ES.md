@@ -6,15 +6,35 @@ Las release notes se redactan por defecto en ingles. Para futuras releases, part
 
 ## Unreleased
 
-### Added
-- soporte para `--description` durante la creacion del repositorio
-- soporte para `--homepage` durante la creacion del repositorio
-- regresiones para validar homepage y el payload de `--dry-run`
-- un comando unico `scripts/check.sh` para las comprobaciones locales de calidad
-- regresiones de errores API y SSH para fallos de token, owner, repositorio y autenticacion
+## v1.5.0
 
-### Changed
-- `Unreleased` ahora solo refleja cambios posteriores a `v1.3.1`
+- anade `scripts/check.sh` como comando unico de calidad local
+- hace que GitHub Actions ejecute la misma suite de checks
+- anade regresiones para token invalido, owner ausente, repositorio existente y fallos de autenticacion SSH
+
+## v1.4.0
+
+- anade `--description` y `--homepage` para metadata al crear repositorios
+- valida URLs de homepage en local y las cubre con regresiones
+- limpia `Unreleased` para que refleje solo cambios posteriores a `v1.3.1`
+
+## v1.3.1
+
+- conserva la metadata de version instalada con un archivo local `VERSION`
+- hace que `ginit --version` priorice la version instalada antes de Git o `dev`
+- anade una regresion para el reporte de version instalada
+
+## v1.3.0
+
+- anade `install.sh` para instalar `ginit` en `~/.local/share/ginit` y enlazar `~/.local/bin/ginit`
+- anade `--owner` para sobrescribir `GITHUB_OWNER` en una sola invocacion
+- anade cobertura de regresion del instalador y del override de owner, incluido el fix de CI para instalar `actionlint`
+
+## v1.2.0
+
+- valida nombres de repositorio en local antes de llamar a la API de GitHub
+- anade regresiones para validacion de nombres y smoke tests de `--dry-run`
+- endurece CI con `actionlint`, `gitleaks` y mejoras del flujo de release
 
 ## v1.1.3
 
