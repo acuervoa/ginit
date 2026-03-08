@@ -15,6 +15,7 @@ Release notes default to English. For future releases, start from [`.github/RELE
 
 ### Changed
 - release workflow guidance now assumes an `Unreleased` section at the top of the changelog
+- installed copies now read their version from a local `VERSION` file before falling back to Git metadata
 
 ## v1.1.3
 

@@ -23,6 +23,7 @@ Changelog en ingles: [`CHANGELOG.md`](CHANGELOG.md)
 - Puede omitir el primer commit con `--no-commit`.
 - Incluye un modo `--dry-run` para validar sin tocar nada.
 - Muestra la version instalada con `--version`.
+- Las instalaciones guardan su version de release en un archivo local `VERSION`.
 
 ## Instalacion
 

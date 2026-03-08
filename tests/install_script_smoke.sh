@@ -22,4 +22,11 @@ if [[ ! -f "$WORK_DIR/home/.local/share/ginit/.env" ]]; then
   exit 1
 fi
 
+installed_version="$(HOME="$WORK_DIR/home" PATH="$WORK_DIR/home/.local/bin:/home/acuervo/.local/bin:$PATH" "$WORK_DIR/home/.local/bin/ginit" --version)"
+
+if [[ "$installed_version" != "v1.3.0" ]]; then
+  printf 'Expected installed version v1.3.0, got %s\n' "$installed_version" >&2
+  exit 1
+fi
+
 printf 'ok\n'

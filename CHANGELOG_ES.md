@@ -15,6 +15,7 @@ Las release notes se redactan por defecto en ingles. Para futuras releases, part
 
 ### Changed
 - la guia de release ahora asume una seccion `Unreleased` al inicio del changelog
+- las instalaciones ahora leen su version desde un archivo local `VERSION` antes de recurrir al metadata de Git
 
 ## v1.1.3
 

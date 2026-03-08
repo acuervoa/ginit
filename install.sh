@@ -28,6 +28,17 @@ copy_if_present() {
   fi
 }
 
+detect_version() {
+  local version
+
+  if version="$(git -C "$SCRIPT_DIR" describe --tags --abbrev=0 2>/dev/null)"; then
+    printf '%s\n' "$version"
+    return
+  fi
+
+  printf 'dev\n'
+}
+
 require_command bash
 require_command curl
 require_command install
@@ -36,6 +47,7 @@ require_command ln
 mkdir -p "$INSTALL_ROOT" "$BIN_DIR"
 
 install -m 755 "$SCRIPT_DIR/ginit.sh" "$INSTALL_ROOT/ginit.sh"
+printf '%s\n' "$(detect_version)" > "$INSTALL_ROOT/VERSION"
 copy_if_present ".env.EXAMPLE"
 copy_if_present "README.md"
 copy_if_present "README_ES.md"

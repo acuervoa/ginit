@@ -9,6 +9,7 @@ while [[ -h "$SOURCE" ]]; do
 done
 SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 ENV_FILE="$SCRIPT_DIR/.env"
+VERSION_FILE="$SCRIPT_DIR/VERSION"
 
 DEFAULT_BRANCH="main"
 VISIBILITY="private"
@@ -80,6 +81,14 @@ EOF
 
 script_version() {
   local version
+
+  if [[ -f "$VERSION_FILE" ]]; then
+    version="$(<"$VERSION_FILE")"
+    if [[ -n "$version" ]]; then
+      printf '%s\n' "$version"
+      return
+    fi
+  fi
 
   if version="$(git -C "$SCRIPT_DIR" describe --tags --abbrev=0 2>/dev/null)"; then
     printf '%s\n' "$version"

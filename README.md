@@ -23,6 +23,7 @@ Spanish changelog: [`CHANGELOG_ES.md`](CHANGELOG_ES.md)
 - Can skip the initial commit with `--no-commit`.
 - Includes a `--dry-run` mode for safe validation.
 - Shows the installed version with `--version`.
+- Installed copies keep their release version in a local `VERSION` file.
 
 ## Installation
 
