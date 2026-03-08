@@ -7,15 +7,12 @@ Las release notes se redactan por defecto en ingles. Para futuras releases, part
 ## Unreleased
 
 ### Added
-- validacion local del nombre del repositorio antes de llamar a la API de GitHub
-- regresiones para validar nombres de repo y el flujo smoke de `--dry-run`
-- comprobaciones de CI con `actionlint` y `gitleaks`
-- un instalador para `~/.local/share/ginit` y `~/.local/bin/ginit`
-- soporte para sobrescribir el owner objetivo con `--owner`
+- soporte para `--description` durante la creacion del repositorio
+- soporte para `--homepage` durante la creacion del repositorio
+- regresiones para validar homepage y el payload de `--dry-run`
 
 ### Changed
-- la guia de release ahora asume una seccion `Unreleased` al inicio del changelog
-- las instalaciones ahora leen su version desde un archivo local `VERSION` antes de recurrir al metadata de Git
+- `Unreleased` ahora solo refleja cambios posteriores a `v1.3.1`
 
 ## v1.1.3
 

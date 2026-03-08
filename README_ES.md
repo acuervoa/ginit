@@ -74,7 +74,7 @@ Tambien puedes copiar `.env.EXAMPLE` y completarlo.
 ## Uso
 
 ```bash
-ginit [repo-name] [--private|--public] [--remote ssh|https] [--owner OWNER] [--no-commit] [--dry-run] [--version]
+ginit [repo-name] [--private|--public] [--remote ssh|https] [--owner OWNER] [--description TEXT] [--homepage URL] [--no-commit] [--dry-run] [--version]
 ```
 
 Ejemplos:
@@ -83,6 +83,8 @@ Ejemplos:
 ginit
 ginit my-new-repo
 ginit my-new-repo --owner my-org
+ginit my-new-repo --description "Repositorio bootstrap"
+ginit my-new-repo --homepage https://example.com/docs
 ginit my-public-repo --public
 ginit my-repo --remote https
 ginit my-repo --no-commit
@@ -94,6 +96,8 @@ ginit --help
 Si omites `repo-name`, el script usa el nombre del directorio actual.
 
 Si omites `--owner`, `ginit` usa `GITHUB_OWNER` desde `.env`.
+
+Si lo indicas, `--homepage` debe empezar por `http://` o `https://`.
 
 No uses `ginit .`: `.` no es un nombre de repositorio valido en GitHub.
 
@@ -129,6 +133,7 @@ bash -n install.sh
 bash tests/version_flag.sh
 bash tests/api_status_regression.sh
 bash tests/repo_name_validation.sh
+bash tests/homepage_validation.sh
 bash tests/owner_flag.sh
 bash tests/dry_run_smoke.sh
 actionlint

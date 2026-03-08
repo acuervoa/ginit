@@ -7,15 +7,12 @@ Release notes default to English. For future releases, start from [`.github/RELE
 ## Unreleased
 
 ### Added
-- local repository name validation before calling the GitHub API
-- repo-name validation and dry-run smoke regressions
-- CI checks for `actionlint` and `gitleaks`
-- an installer script for `~/.local/share/ginit` and `~/.local/bin/ginit`
-- support for overriding the target owner with `--owner`
+- support for `--description` during repository creation
+- support for `--homepage` during repository creation
+- homepage validation and dry-run payload regressions
 
 ### Changed
-- release workflow guidance now assumes an `Unreleased` section at the top of the changelog
-- installed copies now read their version from a local `VERSION` file before falling back to Git metadata
+- `Unreleased` now tracks only post-`v1.3.1` work
 
 ## v1.1.3
 

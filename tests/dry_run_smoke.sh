@@ -56,10 +56,20 @@ EOF
 
 trap 'rm -rf "$WORK_DIR"; rm -f "$SCRIPT_DIR/.env"' EXIT
 
-output="$(PATH="$BIN_DIR:$PATH" "$SCRIPT_DIR/ginit.sh" smoke-repo --dry-run 2>&1)"
+output="$(PATH="$BIN_DIR:$PATH" "$SCRIPT_DIR/ginit.sh" smoke-repo --dry-run --description "Test repository" --homepage "https://example.com/docs" 2>&1)"
 
 if [[ "$output" != *"Dry run: would create remote repository 'test-owner/smoke-repo'"* ]]; then
   printf 'Expected dry-run remote creation message, got: %s\n' "$output" >&2
+  exit 1
+fi
+
+if [[ "$output" != *'"description":"Test repository"'* ]]; then
+  printf 'Expected description in dry-run payload, got: %s\n' "$output" >&2
+  exit 1
+fi
+
+if [[ "$output" != *'"homepage":"https://example.com/docs"'* ]]; then
+  printf 'Expected homepage in dry-run payload, got: %s\n' "$output" >&2
   exit 1
 fi
 

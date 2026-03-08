@@ -19,6 +19,8 @@ DRY_RUN=0
 SHOW_VERSION=0
 REPO_NAME=""
 OWNER_OVERRIDE=""
+REPO_DESCRIPTION=""
+REPO_HOMEPAGE=""
 
 OWNER_TYPE=""
 CREATED_REMOTE=0
@@ -64,7 +66,7 @@ usage() {
 Create and publish a GitHub repository from the current directory.
 
 Usage:
-  ${command_name} [repo-name] [--private|--public] [--remote ssh|https] [--owner OWNER] [--no-commit] [--dry-run] [--version] [--help]
+  ${command_name} [repo-name] [--private|--public] [--remote ssh|https] [--owner OWNER] [--description TEXT] [--homepage URL] [--no-commit] [--dry-run] [--version] [--help]
 
 Options:
   repo-name         Repository name. Defaults to the current directory name.
@@ -72,6 +74,8 @@ Options:
   --public          Create a public repository.
   --remote MODE     Remote URL mode: ssh (default) or https.
   --owner OWNER     Override GITHUB_OWNER for this invocation.
+  --description TXT Set the repository description for creation.
+  --homepage URL    Set the repository homepage URL for creation.
   --no-commit       Skip the initial commit.
   --dry-run         Print planned actions without changing local or remote state.
   --version         Show the installed ginit version.
@@ -147,6 +151,16 @@ parse_args() {
         [[ $# -gt 0 ]] || fatal "--owner requires a value"
         OWNER_OVERRIDE="$1"
         ;;
+      --description)
+        shift
+        [[ $# -gt 0 ]] || fatal "--description requires a value"
+        REPO_DESCRIPTION="$1"
+        ;;
+      --homepage)
+        shift
+        [[ $# -gt 0 ]] || fatal "--homepage requires a value"
+        REPO_HOMEPAGE="$1"
+        ;;
       --no-commit)
         DO_COMMIT=0
         ;;
@@ -195,6 +209,24 @@ validate_repo_name() {
 
   if [[ ! "$repo_name" =~ ^[A-Za-z0-9._-]+$ ]]; then
     fatal "invalid repository name: '$repo_name'"
+  fi
+}
+
+validate_description() {
+  local description="$1"
+
+  if [[ -n "$description" && -z "${description//[[:space:]]/}" ]]; then
+    fatal "invalid repository description: cannot be empty"
+  fi
+}
+
+validate_homepage_url() {
+  local homepage="$1"
+
+  [[ -z "$homepage" ]] && return
+
+  if [[ ! "$homepage" =~ ^https?:// ]]; then
+    fatal "invalid homepage URL: '$homepage'"
   fi
 }
 
@@ -387,6 +419,7 @@ EOF
 create_remote_repository() {
   local url
   local payload
+  local private_flag
 
   if [[ "$OWNER_TYPE" == "Organization" ]]; then
     url="https://api.github.com/orgs/$GITHUB_OWNER/repos"
@@ -394,10 +427,26 @@ create_remote_repository() {
     url="https://api.github.com/user/repos"
   fi
 
-  payload="$(printf '{"name":"%s","private":%s,"visibility":"%s","auto_init":false}' \
+  if [[ "$VISIBILITY" == "private" ]]; then
+    private_flag='true'
+  else
+    private_flag='false'
+  fi
+
+  payload="$(printf '{"name":"%s","private":%s,"visibility":"%s","auto_init":false' \
     "$REPO_NAME" \
-    "$([[ "$VISIBILITY" == "private" ]] && printf 'true' || printf 'false')" \
+    "$private_flag" \
     "$VISIBILITY")"
+
+  if [[ -n "$REPO_DESCRIPTION" ]]; then
+    payload+="$(printf ',"description":"%s"' "$REPO_DESCRIPTION")"
+  fi
+
+  if [[ -n "$REPO_HOMEPAGE" ]]; then
+    payload+="$(printf ',"homepage":"%s"' "$REPO_HOMEPAGE")"
+  fi
+
+  payload+='}'
 
   if [[ $DRY_RUN -eq 1 ]]; then
     dry_run_note "would create remote repository '$GITHUB_OWNER/$REPO_NAME' via $url"
@@ -486,6 +535,8 @@ push_initial_branch() {
 main() {
   parse_args "$@"
   validate_repo_name "$REPO_NAME"
+  validate_description "$REPO_DESCRIPTION"
+  validate_homepage_url "$REPO_HOMEPAGE"
 
   if [[ $SHOW_VERSION -eq 1 ]]; then
     script_version

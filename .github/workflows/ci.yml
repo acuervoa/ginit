@@ -53,6 +53,9 @@ jobs:
       - name: Repo name validation regression
         run: bash tests/repo_name_validation.sh
 
+      - name: Homepage validation regression
+        run: bash tests/homepage_validation.sh
+
       - name: Dry-run smoke test
         run: bash tests/dry_run_smoke.sh
 
