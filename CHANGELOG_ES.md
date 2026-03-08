@@ -10,6 +10,8 @@ Las release notes se redactan por defecto en ingles. Para futuras releases, part
 - soporte para `--description` durante la creacion del repositorio
 - soporte para `--homepage` durante la creacion del repositorio
 - regresiones para validar homepage y el payload de `--dry-run`
+- un comando unico `scripts/check.sh` para las comprobaciones locales de calidad
+- regresiones de errores API y SSH para fallos de token, owner, repositorio y autenticacion
 
 ### Changed
 - `Unreleased` ahora solo refleja cambios posteriores a `v1.3.1`

@@ -32,32 +32,5 @@ jobs:
           tar -xzf /tmp/gitleaks.tar.gz -C /tmp
           sudo mv /tmp/gitleaks /usr/local/bin/gitleaks
 
-      - name: Bash syntax check
-        run: bash -n ginit.sh && bash -n install.sh
-
-      - name: Actionlint
-        run: actionlint
-
-      - name: ShellCheck
-        run: shellcheck ginit.sh install.sh tests/*.sh
-
-      - name: Secrets scan
-        run: gitleaks detect --no-git --source . --redact --exit-code 1
-
-      - name: Version flag regression
-        run: bash tests/version_flag.sh
-
-      - name: API status regression
-        run: bash tests/api_status_regression.sh
-
-      - name: Repo name validation regression
-        run: bash tests/repo_name_validation.sh
-
-      - name: Homepage validation regression
-        run: bash tests/homepage_validation.sh
-
-      - name: Dry-run smoke test
-        run: bash tests/dry_run_smoke.sh
-
-      - name: Owner override regression
-        run: bash tests/owner_flag.sh
+      - name: Run local check suite
+        run: bash scripts/check.sh

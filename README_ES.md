@@ -125,23 +125,15 @@ Antes de publicar, el script:
 
 ## Desarrollo
 
-Comprobaciones locales:
+Comando local de comprobacion:
 
 ```bash
-bash -n ginit.sh
-bash -n install.sh
-bash tests/version_flag.sh
-bash tests/api_status_regression.sh
-bash tests/repo_name_validation.sh
-bash tests/homepage_validation.sh
-bash tests/owner_flag.sh
-bash tests/dry_run_smoke.sh
-actionlint
-gitleaks detect --no-git --source . --redact --exit-code 1
-shellcheck ginit.sh install.sh tests/*.sh
+bash scripts/check.sh
 ```
 
-El repo incluye CI en GitHub Actions para ejecutar estas comprobaciones en cada push y pull request.
+`scripts/check.sh` ejecuta checks de sintaxis, todas las regresiones shell, `shellcheck`, `actionlint` y `gitleaks`.
+
+El repo incluye CI en GitHub Actions para ejecutar la misma suite en cada push y pull request.
 
 Las notas de release se redactan por defecto en ingles. Usa `.github/RELEASE_TEMPLATE.md` como punto de partida para futuras releases.
 

@@ -125,23 +125,15 @@ Before publishing, the script:
 
 ## Development
 
-Local checks:
+Local check command:
 
 ```bash
-bash -n ginit.sh
-bash -n install.sh
-bash tests/version_flag.sh
-bash tests/api_status_regression.sh
-bash tests/repo_name_validation.sh
-bash tests/homepage_validation.sh
-bash tests/owner_flag.sh
-bash tests/dry_run_smoke.sh
-actionlint
-gitleaks detect --no-git --source . --redact --exit-code 1
-shellcheck ginit.sh install.sh tests/*.sh
+bash scripts/check.sh
 ```
 
-The repository includes GitHub Actions CI to run these checks on every push and pull request.
+`scripts/check.sh` runs syntax checks, all shell regressions, `shellcheck`, `actionlint`, and `gitleaks`.
+
+The repository includes GitHub Actions CI to run the same check suite on every push and pull request.
 
 Release notes are written in English by default. Use `.github/RELEASE_TEMPLATE.md` as the starting point for future releases.
 

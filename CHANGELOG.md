@@ -10,6 +10,8 @@ Release notes default to English. For future releases, start from [`.github/RELE
 - support for `--description` during repository creation
 - support for `--homepage` during repository creation
 - homepage validation and dry-run payload regressions
+- a single `scripts/check.sh` command for local quality checks
+- API and SSH error-path regression tests for token, owner, repository, and auth failures
 
 ### Changed
 - `Unreleased` now tracks only post-`v1.3.1` work
